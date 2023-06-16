@@ -54,4 +54,14 @@ public class TaskService {
 
 	}
 
+	public void deleteTask(Long id) {
+		// TODO Auto-generated method stub
+		Optional<Task> taskTemp = repository.findById(id);
+		if (taskTemp.isPresent()) {
+			repository.delete(taskTemp.get());
+		} else {
+			throw new ResourceNotFoundException(" Record not found with id : " + id);
+		}
+	}
+
 }

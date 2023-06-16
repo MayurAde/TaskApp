@@ -15,6 +15,7 @@ public class Task {
 	private String title;
 	private String description;
 	private String status;
+	private String assignedTo;
 
 	public Task() {
 		super();
@@ -25,6 +26,15 @@ public class Task {
 		this.title = title;
 		this.description = description;
 		this.status = status;
+		this.assignedTo = "Not Assigned";
+	}
+
+	public Task(String title, String description, String status, String assignedTo) {
+		super();
+		this.title = title;
+		this.description = description;
+		this.status = status;
+		this.assignedTo = assignedTo;
 	}
 
 	public void setId(Long id) {
@@ -43,6 +53,10 @@ public class Task {
 		this.status = status;
 	}
 
+	public void setAssignedTo(String assignedTo) {
+		this.assignedTo = assignedTo;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -57,6 +71,10 @@ public class Task {
 
 	public String getStatus() {
 		return status;
+	}
+
+	public String getAssignedTo() {
+		return assignedTo;
 	}
 
 }
