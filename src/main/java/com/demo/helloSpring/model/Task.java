@@ -21,14 +21,6 @@ public class Task {
 		super();
 	}
 
-	public Task(String title, String description, String status) {
-		super();
-		this.title = title;
-		this.description = description;
-		this.status = status;
-		this.assignedTo = "Not Assigned";
-	}
-
 	public Task(String title, String description, String status, String assignedTo) {
 		super();
 		this.title = title;

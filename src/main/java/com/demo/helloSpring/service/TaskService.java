@@ -1,6 +1,7 @@
 package com.demo.helloSpring.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +38,25 @@ public class TaskService {
 
 	}
 
-	public Task updateTask(Task task) {
+	public Task updateTask(Long id, Task task) {
 		// TODO Auto-generated method stub
-		Optional<Task> tasktemp = repository.findById(task.getId());
+		Optional<Task> tasktemp = repository.findById(id);
 		if (tasktemp.isPresent()) {
 			Task updateTask = tasktemp.get();
-			updateTask.setId(task.getId());
+
 			updateTask.setTitle(task.getTitle());
 			updateTask.setDescription(task.getDescription());
 			updateTask.setStatus(task.getStatus());
-			repository.save(updateTask);
-			return updateTask;
+			updateTask.setAssignedTo(task.getAssignedTo());
+			return repository.save(updateTask);
 		} else {
-			throw new ResourceNotFoundException(" Record not found with id : " + task.getId());
+			Task createTask = new Task();
+
+			createTask.setTitle(task.getTitle());
+			createTask.setDescription(task.getDescription());
+			createTask.setStatus(task.getStatus());
+			createTask.setAssignedTo(task.getAssignedTo());
+			return repository.save(createTask);
 		}
 
 	}
@@ -62,6 +69,53 @@ public class TaskService {
 		} else {
 			throw new ResourceNotFoundException(" Record not found with id : " + id);
 		}
+	}
+
+	public List<Task> getTaskByName(String assignedTo) {
+		// TODO Auto-generated method stub
+		return repository.findByAssignedTo(assignedTo);
+	}
+
+	public Task patch(Long id, Map<String, Object> fields) {
+		Optional<Task> taskTemp = repository.findById(id);
+		if (taskTemp.isPresent()) {
+			Task task = taskTemp.get();
+			for (Map.Entry<String, Object> field : fields.entrySet()) {
+				String parameter = field.getKey();
+				Object value = field.getValue();
+				System.out.println(parameter + " " + value);
+				switch (parameter) {
+
+				case "title": {
+					task.setTitle((String) value);
+					break;
+				}
+				case "status": {
+					task.setStatus((String) value);
+					break;
+
+				}
+				case "description": {
+					task.setDescription((String) value);
+					break;
+
+				}
+				case "assignedTo": {
+					task.setAssignedTo((String) value);
+					break;
+				}
+
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + parameter);
+				}
+			}
+			repository.save(task);
+			return task;
+
+		} else {
+			throw new ResourceNotFoundException("Resource not found wiht given id");
+		}
+
 	}
 
 }
